@@ -1,22 +1,28 @@
-name: Run ML Script Hourly
+name: Run ML Script
 
 on:
-  schedule:
-    - cron: '0 * * * *'  # Runs hourly
-  workflow_dispatch:    # Allows manual trigger
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  run-ml-script:
+  run-ml:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: List files for debugging
+        run: ls -R
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'  # or your preferred version
+          python-version: '3.8'  # Change to your preferred version
 
       - name: Install dependencies
         run: |
@@ -28,5 +34,4 @@ jobs:
           fi
 
       - name: Run ML script
-        run: |
-          python ml.py
+        run: python ml.py
