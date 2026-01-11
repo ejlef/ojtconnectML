@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   run-ml:
@@ -22,9 +19,9 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'  # Change to your preferred version
+          python-version: '3.8'
 
-      - name: Install dependencies
+      - name: Install dependencies if requirements.txt exists
         run: |
           if [ -f requirements.txt ]; then
             pip install -r requirements.txt
