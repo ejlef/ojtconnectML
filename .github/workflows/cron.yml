@@ -2,26 +2,31 @@ name: Run ML Script Hourly
 
 on:
   schedule:
-    - cron: '* * * * *'  # Every hour at minute 0
+    - cron: '0 * * * *'  # Runs hourly
+  workflow_dispatch:    # Allows manual trigger
 
 jobs:
-  run-script:
+  run-ml-script:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.x'  # specify your Python version
+          python-version: '3.8'  # or your preferred version
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
-        # If you don't have dependencies, you can skip this step
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "requirements.txt not found!"
+            exit 1
+          fi
 
-      - name: Run ml.py
+      - name: Run ML script
         run: |
           python ml.py
